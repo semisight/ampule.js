@@ -24,3 +24,16 @@ A melody object is an array of maps. Each map is a note. It looks like this:
 	...
 ];
 ```
+
+This is the structure for each note map (as of this commit):
+
+```javascript
+{
+	//Required
+	note: //frequency (Hz)
+	duration: //length of the note (ms)
+
+	//Optional
+	shape: //Number {1: sine, 2: sawtooth, 3: square}
+}
+```
