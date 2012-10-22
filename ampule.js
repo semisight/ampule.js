@@ -26,45 +26,38 @@ var ampule = function(melody) {
 	function fillData() {
 		var currentFloat = 0;
 
-		for(var i in melody) {
+		for(var i=0; i<melody.length; i++) {
 			var note = melody[i];
 			var freq = note.note;
 			var duration = note.duration * 44.100;
 
-			for (var samp = currentFloat; samp < (currentFloat + duration); samp++) {
-				genData[samp] = Math.sin(samp / (K / freq));
-			};
+			for (var samp=0; samp<duration; samp++) {
+				genData[samp+currentFloat] = Math.sin(samp / (K / freq));
+			}
+
+			currentFloat += duration;
 		}
+
+		console.log("Current float: " + currentFloat);
 	}
 
 	function process(e) {
 		var data = e.outputBuffer.getChannelData(0);
 
-		for(var i=0; (i<data.length && pointer < genData.length); ++i) {
+		for(var i=0; i<data.length && pointer<genData.length; ++i) {
 			data[i] = genData[pointer++];
 		}
 
-		console.log(pointer, data);
-
-		if(pointer == genData.length) {
-			pause();
-		}
+		if(pointer == genData.length)
+			node.disconnect();
 	};
-
-	function play() {
-		node.connect(context.destination);
-	}
-
-	function pause() {
-		node.disconnect();
-	}
 
 	init();
 	fillData();
 
 	return {
-		play: play,
-		pause: pause,
+		play: function() {node.connect(context.destination)},
+		pause: node.disconnect,
 		arr: genData
 	};
 };
