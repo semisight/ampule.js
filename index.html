@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Web Audio Demo</title>
+<script type="text/javascript" src="ampule.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+var mel = [
+	{
+		note: 440,
+		duration: 4000
+	},
+	{
+		note: 220,
+		duration: 1000
+	},
+	{
+		note: 563,
+		duration: 50
+	}
+];
+alert(mel);
+var amp = ampule(mel);
+amp.play();
+</script>
+</body>
+</html>
