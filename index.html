@@ -8,23 +8,24 @@
 <script type="text/javascript">
 var mel = [
 	{
-		note: 440,
-		duration: 1000,
-		shape: 3
-	},
-	{
-		note: 220,
+		note: 0,
 		duration: 1000,
 		shape: 2
 	},
 	{
-		note: 563,
-		duration: 200
+		note: 1,
+		duration: 1000,
+		shape: 2
+	},
+	{
+		note: 4,
+		duration: 500,
+		shape: 4,
+		ar: 16
 	}
 ];
-console.log(mel);
 var amp = ampule(mel);
-amp.play();
+amp();
 </script>
 </body>
 </html>
