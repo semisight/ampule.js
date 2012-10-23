@@ -1,16 +1,13 @@
-var ampule = function(melody) {
-	var context, node, S, pointer, totalDuration, buffer, genData, currentFloat;
+var ampule = function(melody, totalDuration) {
+	var context, node, S, pointer, buffer, genData, currentFloat;
 
 	//Initialize the variables (build the context, node, etc.)
 	context = new webkitAudioContext();
 	node = context.createJavaScriptNode(1024, 0, 1);
 	node.onaudioprocess = process;
 	S = context.sampleRate;
-	pointer = totalDuration = currentFloat = 0;
+	pointer = currentFloat = 0;
 
-	for (var i in melody) {
-		totalDuration += melody[i].duration;
-	}
 
 	buffer = new ArrayBuffer(4 * Math.ceil(totalDuration * S/1000));
 	genData = new Float32Array(buffer);
@@ -48,7 +45,7 @@ var ampule = function(melody) {
 			genData[samp] = shape==4 ? genData[samp] - temp : temp;
 
 			//optional: convert to "8-bit"
-			genData[samp] = Math.round(genData[samp]*128)/128;
+			//genData[samp] = Math.round(genData[samp]*128)/128;
 		}
 
 		currentFloat += duration;

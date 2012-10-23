@@ -18,13 +18,19 @@ var mel = [
 		shape: 2
 	},
 	{
-		note: 4,
+		note: -10,
 		duration: 500,
 		shape: 4,
 		ar: 16
 	}
 ];
-var amp = ampule(mel);
+totalDuration = 0;
+
+for (var i in mel) {
+	totalDuration += mel[i].duration;
+}
+
+var amp = ampule(mel, totalDuration);
 amp();
 </script>
 </body>
