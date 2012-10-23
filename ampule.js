@@ -1,54 +1,40 @@
 var ampule = function(melody) {
-	var context, node, S, K, buffer, genData;
-	var pointer;
+	var context, node, S, pointer, totalDuration, buffer, genData, currentFloat;
 
-	function init() {
-		context = new webkitAudioContext();
-		node = context.createJavaScriptNode(1024, 0, 1);
-		node.onaudioprocess = process;
-		S = context.sampleRate;
-		K = S / (2 * Math.PI);
-		pointer = 0;
+	//Initialize the variables (build the context, node, etc.)
+	context = new webkitAudioContext();
+	node = context.createJavaScriptNode(1024, 0, 1);
+	node.onaudioprocess = process;
+	S = context.sampleRate;
+	pointer = totalDuration = currentFloat = 0;
 
-		var totalDuration = 0;
-
-		for (var i in melody) {
-			totalDuration += melody[i].duration;
-		}
-
-		totalDuration = Math.ceil(totalDuration * 44.100);
-
-		buffer = new ArrayBuffer(4 * totalDuration);
-		genData = new Float32Array(buffer);
+	for (var i in melody) {
+		totalDuration += melody[i].duration;
 	}
 
-	function fillData() {
-		var currentFloat = 0;
+	totalDuration = Math.ceil(totalDuration * 44.100);
 
-		for(var i=0; i<melody.length; i++) {
-			var note = melody[i];
-			var freq = note.note;
-			var duration = note.duration * 44.100;
-			var shape = 1;
-			if("shape" in note) shape = note.shape;
+	buffer = new ArrayBuffer(4 * totalDuration);
+	genData = new Float32Array(buffer);
 
-			for (var samp=currentFloat; samp<(duration + currentFloat); samp++) {
-				var modSamp = samp%(S/freq), maxSamp = S/freq;
-				if(shape == 1) {
-					genData[samp] = Math.sin(samp*freq / K);
-				}
-				if(shape == 2) {
-					genData[samp] = modSamp / maxSamp;
-				}
-				if(shape == 3) {
-					genData[samp] = modSamp > maxSamp*.5 ? 1.0 : -1.0;
-				}
-			}
+	//Fill the genData buffer with the rendered music.
+	for(var i=0; i<melody.length; i++) {
+		var note = melody[i];
+		var freq = note.note;
+		var duration = note.duration * 44.100;
+		var shape = note.shape || 1;
 
-			currentFloat += duration;
+		for (var samp=currentFloat; samp<(duration + currentFloat); samp++) {
+			var modSamp = samp%(S/freq), maxSamp = S/freq;
+			if(shape == 1)
+				genData[samp] = Math.sin(samp*freq*2*Math.PI / S);
+			if(shape == 2)
+				genData[samp] = 2*(modSamp / maxSamp) - 1;
+			if(shape == 3)
+				genData[samp] = modSamp > maxSamp*.5 ? 1.0 : -1.0;
 		}
 
-		console.log(genData);
+		currentFloat += duration;
 	}
 
 	function process(e) {
@@ -61,9 +47,6 @@ var ampule = function(melody) {
 		if(pointer == genData.length)
 			node.disconnect();
 	};
-
-	init();
-	fillData();
 
 	return {
 		play: function() {node.connect(context.destination)},
