@@ -8,7 +8,6 @@ var ampule = function(melody, totalDuration) {
 	S = context.sampleRate;
 	pointer = currentFloat = 0;
 
-
 	buffer = new ArrayBuffer(4 * Math.ceil(totalDuration * S/1000));
 	genData = new Float32Array(buffer);
 
@@ -18,7 +17,7 @@ var ampule = function(melody, totalDuration) {
 		var freq = 440*Math.pow(2, note.note/12);
 		var duration = note.duration * S/1000;
 		var shape = note.shape || 0;
-		var ar = note.ar || 2;
+		var ar = note.ar || 1;
 
 		for (var samp=currentFloat; samp<(duration + currentFloat); samp++) {
 			var modSamp = samp%(S/freq), maxSamp = S/freq;
@@ -39,10 +38,10 @@ var ampule = function(melody, totalDuration) {
 			genData[samp] *= Math.pow((duration-samp+currentFloat)/duration, ar);
 
 			//Run the wave through a low-pass filter
-			var temp = samp==0 ? genData[samp] : .5*genData[samp] + .5*genData[samp-1];
+			//var temp = samp==0 ? genData[samp] : .5*genData[samp] + .5*genData[samp-1];
 
 			//or, in the case of a drum, a high-pass filter
-			genData[samp] = shape==4 ? genData[samp] - temp : temp;
+			//genData[samp] = shape==4 ? genData[samp] - temp : temp;
 
 			//optional: convert to "8-bit"
 			//genData[samp] = Math.round(genData[samp]*128)/128;

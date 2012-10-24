@@ -8,26 +8,79 @@
 <script type="text/javascript">
 var mel = [
 	{
-		note: 0,
-		duration: 1000,
-		shape: 2
+		note: 22,
+		duration: 2,
+		shape: 1
 	},
 	{
-		note: 1,
-		duration: 1000,
-		shape: 2
+		note: 19,
+		duration: 1,
+		shape: 1,
 	},
 	{
-		note: -10,
-		duration: 500,
-		shape: 4,
-		ar: 16
-	}
+		note: 22,
+		duration: 2,
+		shape: 1
+	},
+	{
+		note: 19,
+		duration: 1,
+		shape: 1,
+	},
+	{
+		note: 23,
+		duration: 2,
+		shape: 1
+	},
+	{
+		note: 22,
+		duration: 1,
+		shape: 1
+	},
+	{
+		note: 21,
+		duration: 2,
+		shape: 1
+	},
+	{
+		note: 21,
+		duration: 1,
+		shape: 1
+	},
+	{
+		note: 22,
+		duration: 2,
+		shape: 1
+	},
+	{
+		note: 16,
+		duration: 1,
+		shape: 1
+	},
+	{
+		note: 15,
+		duration: 2,
+		shape: 1
+	},
+	{
+		note: 21,
+		duration: 1,
+		shape: 1
+	},
+	{
+		note: 20,
+		duration: 2,
+		shape: 1
+	},
 ];
 totalDuration = 0;
 
+//Preprocess melody
+var bps = 1;
 for (var i in mel) {
-	totalDuration += mel[i].duration;
+	var note = mel[i];
+	note.duration = note.duration/(4*bps) * 1000;
+	totalDuration += note.duration;
 }
 
 var amp = ampule(mel, totalDuration);
