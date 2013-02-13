@@ -1,7 +1,7 @@
 Ampule.js: A small audio synthesis library
 ---
 
-Ampule.js is a library that returns access to a global object that can play simple melodies. This library is *not* intended to be replete with features; the only feature here is size (after minification and compression of course).
+Ampule.js is a library that returns a function that can play simple melodies when evaluated. This library is *not* intended to be replete with features; the only feature here is size (after minification and compression of course). This was written a while ago for fun, and targets the Chrome browser (any other browser compatibility is purely coincidental).
 
 ##How to Use:
 
@@ -30,10 +30,10 @@ This is the structure for each note map (as of this commit):
 ```javascript
 {
 	//Required
-	note: //frequency (Hz)
-	duration: //length of the note (ms)
+	note: x 	//frequency (Hz)
+	duration: y	//length of the note (ms)
 
 	//Optional
-	shape: //Number {1: sine, 2: sawtooth, 3: square}
+	shape: z	//Number {1: sine, 2: sawtooth, 3: square}
 }
 ```
